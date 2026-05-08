@@ -41,13 +41,14 @@ local Players = game:GetService("Players")
 local Player = Players.LocalPlayer
 local UserInputService = game:GetService("UserInputService")
 local Loaded = false
+local AutoExecute = false
 local DECAL_ID = "126793551564937"
 
 local function LoadScripts()
     spawn(function()
         pcall(function()
-            loadstring(game:HttpGet(SCRIPTS.Kaitun))()
-        end)    end)
+            loadstring(game:HttpGet(SCRIPTS.Kaitun))()        end)
+    end)
     spawn(function()
         pcall(function()
             loadstring(game:HttpGet(SCRIPTS.AntiAFK, true))()
@@ -62,8 +63,8 @@ ScreenGui.DisplayOrder = 999
 ScreenGui.ResetOnSpawn = false
 
 local ButtonFrame = Instance.new("Frame")
-ButtonFrame.Size = UDim2.new(0, 220, 0, 100)
-ButtonFrame.Position = UDim2.new(0.5, -110, 0.5, -50)
+ButtonFrame.Size = UDim2.new(0, 220, 0, 130)
+ButtonFrame.Position = UDim2.new(0.5, -110, 0.5, -65)
 ButtonFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 30)
 ButtonFrame.BorderColor3 = Color3.fromRGB(0, 150, 255)
 ButtonFrame.BorderSizePixel = 2
@@ -95,18 +96,69 @@ StatusLabel.Position = UDim2.new(0, 5, 0, 55)
 StatusLabel.BackgroundColor3 = Color3.fromRGB(30, 30, 45)
 StatusLabel.TextColor3 = Color3.new(0.8, 1, 0.8)
 StatusLabel.TextSize = 13
-StatusLabel.Font = Enum.Font.SourceSans
-StatusLabel.Text = "Status: Ready"StatusLabel.Parent = ButtonFrame
+StatusLabel.Font = Enum.Font.SourceSansStatusLabel.Text = "Status: Ready"
+StatusLabel.Parent = ButtonFrame
+
+local AutoExecuteFrame = Instance.new("Frame")
+AutoExecuteFrame.Size = UDim2.new(1, -10, 0, 35)
+AutoExecuteFrame.Position = UDim2.new(0, 5, 0, 78)
+AutoExecuteFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 35)
+AutoExecuteFrame.BorderSizePixel = 0
+AutoExecuteFrame.Parent = ButtonFrame
+
+local ToggleButton = Instance.new("TextButton")
+ToggleButton.Size = UDim2.new(0, 60, 0, 25)
+ToggleButton.Position = UDim2.new(1, -65, 0, 5)
+ToggleButton.BackgroundColor3 = Color3.fromRGB(80, 80, 90)
+ToggleButton.TextColor3 = Color3.new(1, 1, 1)
+ToggleButton.TextSize = 14
+ToggleButton.Font = Enum.Font.SourceSansBold
+ToggleButton.Text = "OFF"
+ToggleButton.BorderSizePixel = 0
+ToggleButton.Parent = AutoExecuteFrame
+
+local AutoExecuteLabel = Instance.new("TextLabel")
+AutoExecuteLabel.Size = UDim2.new(1, -70, 0, 25)
+AutoExecuteLabel.Position = UDim2.new(0, 5, 0, 5)
+AutoExecuteLabel.BackgroundTransparency = 1
+AutoExecuteLabel.TextColor3 = Color3.new(0.9, 0.9, 1)
+AutoExecuteLabel.TextSize = 14
+AutoExecuteLabel.Font = Enum.Font.SourceSansBold
+AutoExecuteLabel.Text = "Auto Execute:"
+AutoExecuteLabel.TextXAlignment = Enum.TextXAlignment.Left
+AutoExecuteLabel.Parent = AutoExecuteFrame
 
 local AuthorLabel = Instance.new("TextLabel")
 AuthorLabel.Size = UDim2.new(1, -10, 0, 18)
-AuthorLabel.Position = UDim2.new(0, 5, 0, 77)
+AuthorLabel.Position = UDim2.new(0, 5, 0, 107)
 AuthorLabel.BackgroundTransparency = 1
 AuthorLabel.TextColor3 = Color3.new(0.7, 0.7, 1)
 AuthorLabel.TextSize = 12
 AuthorLabel.Font = Enum.Font.SourceSansItalic
 AuthorLabel.Text = "by Phongthikscripting"
 AuthorLabel.Parent = ButtonFrame
+
+local function UpdateAutoExecuteUI()
+    if AutoExecute then
+        ToggleButton.Text = "ON"
+        ToggleButton.BackgroundColor3 = Color3.fromRGB(0, 200, 100)
+    else
+        ToggleButton.Text = "OFF"
+        ToggleButton.BackgroundColor3 = Color3.fromRGB(80, 80, 90)
+    endend
+
+ToggleButton.MouseButton1Click:Connect(function()
+    AutoExecute = not AutoExecute
+    UpdateAutoExecuteUI()
+    
+    if AutoExecute then
+        StatusLabel.Text = "Status: Auto ON"
+        print("Auto Execute: ON - Scripts will load automatically")
+    else
+        StatusLabel.Text = "Status: Ready"
+        print("Auto Execute: OFF")
+    end
+end)
 
 Button.MouseButton1Click:Connect(function()
     if not Loaded then
@@ -142,10 +194,10 @@ ButtonFrame.InputBegan:Connect(function(input)
             end
         end)
     end
-end)
-ButtonFrame.InputChanged:Connect(function(input)
+end)ButtonFrame.InputChanged:Connect(function(input)
     if input.UserInputType == Enum.UserInputType.MouseMovement then
-        dragInput = input    end
+        dragInput = input
+    end
 end)
 UserInputService.InputChanged:Connect(function(input)
     if input == dragInput and dragging then
@@ -160,4 +212,15 @@ end)
 spawn(function()
     repeat wait() until Player.Character and Player.Character:FindFirstChild("HumanoidRootPart")
     wait(1)
+    
+    if AutoExecute then
+        print("Auto Execute triggered!")
+        Button.Text = "⏳ Loading..."
+        LoadScripts()
+        wait(2)
+        Loaded = true
+        Button.Text = "kaitun set"
+        Button.BackgroundColor3 = Color3.fromRGB(0, 200, 100)
+        StatusLabel.Text = "Status: ✓ Auto Loaded"
+    end
 end)
