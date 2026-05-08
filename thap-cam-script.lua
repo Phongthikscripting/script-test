@@ -48,7 +48,6 @@ local function LoadScripts()
         pcall(function()
             loadstring(game:HttpGet(SCRIPTS.Kaitun))()
         end)    end)
-    
     spawn(function()
         pcall(function()
             loadstring(game:HttpGet(SCRIPTS.AntiAFK, true))()
@@ -72,8 +71,7 @@ ButtonFrame.Parent = ScreenGui
 
 local Icon = Instance.new("ImageLabel")
 Icon.Size = UDim2.new(0, 40, 0, 40)
-Icon.Position = UDim2.new(0, 10, 0, 5)
-Icon.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Icon.Position = UDim2.new(0, 10, 0, 8)
 Icon.BackgroundTransparency = 1
 Icon.Image = "rbxassetid://" .. DECAL_ID
 Icon.ScaleType = Enum.ScaleType.Crop
@@ -82,7 +80,7 @@ Icon.Parent = ButtonFrame
 local Button = Instance.new("TextButton")
 Button.Name = "kaitun set"
 Button.Size = UDim2.new(1, -60, 0, 45)
-Button.Position = UDim2.new(0, 55, 0, 5)
+Button.Position = UDim2.new(0, 55, 0, 8)
 Button.BackgroundColor3 = Color3.fromRGB(0, 120, 255)
 Button.TextColor3 = Color3.new(1, 1, 1)
 Button.TextSize = 20
@@ -93,17 +91,16 @@ Button.Parent = ButtonFrame
 
 local StatusLabel = Instance.new("TextLabel")
 StatusLabel.Size = UDim2.new(1, -10, 0, 20)
-StatusLabel.Position = UDim2.new(0, 5, 0, 52)
+StatusLabel.Position = UDim2.new(0, 5, 0, 55)
 StatusLabel.BackgroundColor3 = Color3.fromRGB(30, 30, 45)
 StatusLabel.TextColor3 = Color3.new(0.8, 1, 0.8)
-StatusLabel.TextSize = 13StatusLabel.Font = Enum.Font.SourceSans
-StatusLabel.Text = "Status: Ready"
-StatusLabel.Parent = ButtonFrame
+StatusLabel.TextSize = 13
+StatusLabel.Font = Enum.Font.SourceSans
+StatusLabel.Text = "Status: Ready"StatusLabel.Parent = ButtonFrame
 
 local AuthorLabel = Instance.new("TextLabel")
 AuthorLabel.Size = UDim2.new(1, -10, 0, 18)
-AuthorLabel.Position = UDim2.new(0, 5, 0, 75)
-AuthorLabel.BackgroundColor3 = Color3.fromRGB(20, 20, 30)
+AuthorLabel.Position = UDim2.new(0, 5, 0, 77)
 AuthorLabel.BackgroundTransparency = 1
 AuthorLabel.TextColor3 = Color3.new(0.7, 0.7, 1)
 AuthorLabel.TextSize = 12
@@ -116,26 +113,20 @@ Button.MouseButton1Click:Connect(function()
         Button.Text = "⏳ Loading..."
         Button.BackgroundColor3 = Color3.fromRGB(255, 140, 0)
         StatusLabel.Text = "Status: Loading..."
-        
         LoadScripts()
-        
-        task.delay(2, function()
-            Loaded = true
-            Button.Text = "kaitun set"
-            Button.BackgroundColor3 = Color3.fromRGB(0, 200, 100)
-            StatusLabel.Text = "Status: ✓ Loaded"
-        end)
+        wait(2)
+        Loaded = true
+        Button.Text = "kaitun set"
+        Button.BackgroundColor3 = Color3.fromRGB(0, 200, 100)
+        StatusLabel.Text = "Status: ✓ Loaded"
     else
         Button.Text = "🔄 Reloading..."
         StatusLabel.Text = "Status: Reloading..."
-        
         LoadScripts()
-        
-        task.delay(2, function()
-            Button.Text = "kaitun set"
-            Button.BackgroundColor3 = Color3.fromRGB(0, 200, 100)
-            StatusLabel.Text = "Status: ✓ Reloaded"
-        end)
+        wait(2)
+        Button.Text = "kaitun set"
+        Button.BackgroundColor3 = Color3.fromRGB(0, 200, 100)
+        StatusLabel.Text = "Status: ✓ Reloaded"
     end
 end)
 
@@ -145,19 +136,17 @@ ButtonFrame.InputBegan:Connect(function(input)
         dragging = true
         dragStart = input.Position
         startPos = ButtonFrame.Position
-        input.Changed:Connect(function()            if input.UserInputState == Enum.UserInputState.End then
+        input.Changed:Connect(function()
+            if input.UserInputState == Enum.UserInputState.End then
                 dragging = false
             end
         end)
     end
 end)
-
 ButtonFrame.InputChanged:Connect(function(input)
     if input.UserInputType == Enum.UserInputType.MouseMovement then
-        dragInput = input
-    end
+        dragInput = input    end
 end)
-
 UserInputService.InputChanged:Connect(function(input)
     if input == dragInput and dragging then
         local delta = input.Position - dragStart
@@ -168,7 +157,7 @@ UserInputService.InputChanged:Connect(function(input)
     end
 end)
 
-task.spawn(function()
-    repeat task.wait() until Player.Character and Player.Character:FindFirstChild("HumanoidRootPart")
-    task.wait(1)
+spawn(function()
+    repeat wait() until Player.Character and Player.Character:FindFirstChild("HumanoidRootPart")
+    wait(1)
 end)
