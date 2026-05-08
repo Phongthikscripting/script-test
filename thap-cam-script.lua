@@ -42,13 +42,12 @@ local Player = Players.LocalPlayer
 local UserInputService = game:GetService("UserInputService")
 local Loaded = false
 local AutoExecute = false
-local DECAL_ID = "126793551564937"
 
 local function LoadScripts()
     spawn(function()
         pcall(function()
-            loadstring(game:HttpGet(SCRIPTS.Kaitun))()        end)
-    end)
+            loadstring(game:HttpGet(SCRIPTS.Kaitun))()
+        end)    end)
     spawn(function()
         pcall(function()
             loadstring(game:HttpGet(SCRIPTS.AntiAFK, true))()
@@ -70,38 +69,40 @@ ButtonFrame.BorderColor3 = Color3.fromRGB(0, 150, 255)
 ButtonFrame.BorderSizePixel = 2
 ButtonFrame.Parent = ScreenGui
 
-local Icon = Instance.new("ImageLabel")
-Icon.Size = UDim2.new(0, 40, 0, 40)
-Icon.Position = UDim2.new(0, 10, 0, 8)
-Icon.BackgroundTransparency = 1
-Icon.Image = "rbxassetid://" .. DECAL_ID
-Icon.ScaleType = Enum.ScaleType.Crop
-Icon.Parent = ButtonFrame
+local TitleLabel = Instance.new("TextLabel")
+TitleLabel.Size = UDim2.new(1, -10, 0, 35)
+TitleLabel.Position = UDim2.new(0, 5, 0, 8)
+TitleLabel.BackgroundColor3 = Color3.fromRGB(0, 120, 255)
+TitleLabel.TextColor3 = Color3.new(1, 1, 1)
+TitleLabel.TextSize = 20
+TitleLabel.Font = Enum.Font.SourceSansBold
+TitleLabel.Text = "kaitun set"
+TitleLabel.BorderSizePixel = 0
+TitleLabel.Parent = ButtonFrame
 
 local Button = Instance.new("TextButton")
-Button.Name = "kaitun set"
-Button.Size = UDim2.new(1, -60, 0, 45)
-Button.Position = UDim2.new(0, 55, 0, 8)
-Button.BackgroundColor3 = Color3.fromRGB(0, 120, 255)
+Button.Size = UDim2.new(1, -10, 0, 40)
+Button.Position = UDim2.new(0, 5, 0, 48)
+Button.BackgroundColor3 = Color3.fromRGB(0, 170, 255)
 Button.TextColor3 = Color3.new(1, 1, 1)
-Button.TextSize = 20
+Button.TextSize = 18
 Button.Font = Enum.Font.SourceSansBold
-Button.Text = "kaitun set"
+Button.Text = "LOAD SCRIPTS"
 Button.BorderSizePixel = 0
 Button.Parent = ButtonFrame
 
 local StatusLabel = Instance.new("TextLabel")
 StatusLabel.Size = UDim2.new(1, -10, 0, 20)
-StatusLabel.Position = UDim2.new(0, 5, 0, 55)
+StatusLabel.Position = UDim2.new(0, 5, 0, 90)
 StatusLabel.BackgroundColor3 = Color3.fromRGB(30, 30, 45)
 StatusLabel.TextColor3 = Color3.new(0.8, 1, 0.8)
-StatusLabel.TextSize = 13
-StatusLabel.Font = Enum.Font.SourceSansStatusLabel.Text = "Status: Ready"
+StatusLabel.TextSize = 13StatusLabel.Font = Enum.Font.SourceSans
+StatusLabel.Text = "Status: Ready"
 StatusLabel.Parent = ButtonFrame
 
 local AutoExecuteFrame = Instance.new("Frame")
 AutoExecuteFrame.Size = UDim2.new(1, -10, 0, 35)
-AutoExecuteFrame.Position = UDim2.new(0, 5, 0, 78)
+AutoExecuteFrame.Position = UDim2.new(0, 5, 0, 113)
 AutoExecuteFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 35)
 AutoExecuteFrame.BorderSizePixel = 0
 AutoExecuteFrame.Parent = ButtonFrame
@@ -144,8 +145,8 @@ local function UpdateAutoExecuteUI()
         ToggleButton.BackgroundColor3 = Color3.fromRGB(0, 200, 100)
     else
         ToggleButton.Text = "OFF"
-        ToggleButton.BackgroundColor3 = Color3.fromRGB(80, 80, 90)
-    endend
+        ToggleButton.BackgroundColor3 = Color3.fromRGB(80, 80, 90)    end
+end
 
 ToggleButton.MouseButton1Click:Connect(function()
     AutoExecute = not AutoExecute
@@ -168,7 +169,7 @@ Button.MouseButton1Click:Connect(function()
         LoadScripts()
         wait(2)
         Loaded = true
-        Button.Text = "kaitun set"
+        Button.Text = "✓ Loaded"
         Button.BackgroundColor3 = Color3.fromRGB(0, 200, 100)
         StatusLabel.Text = "Status: ✓ Loaded"
     else
@@ -176,7 +177,7 @@ Button.MouseButton1Click:Connect(function()
         StatusLabel.Text = "Status: Reloading..."
         LoadScripts()
         wait(2)
-        Button.Text = "kaitun set"
+        Button.Text = "✓ Loaded"
         Button.BackgroundColor3 = Color3.fromRGB(0, 200, 100)
         StatusLabel.Text = "Status: ✓ Reloaded"
     end
@@ -193,8 +194,8 @@ ButtonFrame.InputBegan:Connect(function(input)
                 dragging = false
             end
         end)
-    end
-end)ButtonFrame.InputChanged:Connect(function(input)
+    endend)
+ButtonFrame.InputChanged:Connect(function(input)
     if input.UserInputType == Enum.UserInputType.MouseMovement then
         dragInput = input
     end
@@ -219,7 +220,7 @@ spawn(function()
         LoadScripts()
         wait(2)
         Loaded = true
-        Button.Text = "kaitun set"
+        Button.Text = "✓ Loaded"
         Button.BackgroundColor3 = Color3.fromRGB(0, 200, 100)
         StatusLabel.Text = "Status: ✓ Auto Loaded"
     end
