@@ -184,4 +184,4 @@ spawn(function()
     end
 end)
 
-print("kaitun set (with auto) loaded! by Phongthikscripting")
+print("kaitun set (with auto) loaded! by Phongthikscripting(github)")
