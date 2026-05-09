@@ -7,7 +7,7 @@ local Players = game:GetService("Players")
 local Player = Players.LocalPlayer
 local UserInputService = game:GetService("UserInputService")
 local Loaded = false
-local AutoExecute = true
+local AutoExecute = false
 
 local function LoadScripts()
     spawn(function()
@@ -77,11 +77,11 @@ AutoExecuteFrame.Parent = ButtonFrame
 local ToggleButton = Instance.new("TextButton")
 ToggleButton.Size = UDim2.new(0, 60, 0, 25)
 ToggleButton.Position = UDim2.new(1, -65, 0, 5)
-ToggleButton.BackgroundColor3 = AutoExecute and Color3.fromRGB(0, 200, 100) or Color3.fromRGB(80, 80, 90)
+ToggleButton.BackgroundColor3 = Color3.fromRGB(80, 80, 90)
 ToggleButton.TextColor3 = Color3.new(1, 1, 1)
 ToggleButton.TextSize = 14
 ToggleButton.Font = Enum.Font.SourceSansBold
-ToggleButton.Text = AutoExecute and "ON" or "OFF"
+ToggleButton.Text = "OFF"
 ToggleButton.BorderSizePixel = 0
 ToggleButton.Parent = AutoExecuteFrame
 
@@ -144,27 +144,46 @@ Button.MouseButton1Click:Connect(function()
     end
 end)
 
-local dragging, dragInput, dragStart, startPos
-ButtonFrame.InputBegan:Connect(function(input)    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+-- DRAG FUNCTION - FIX CHO MOBILE + PC
+local dragging = falselocal dragInput = nil
+local dragStart = nil
+local startPos = nil
+
+local function onDragStart(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
         dragging = true
         dragStart = input.Position
         startPos = ButtonFrame.Position
+        
         input.Changed:Connect(function()
             if input.UserInputState == Enum.UserInputState.End then
                 dragging = false
             end
         end)
     end
-end)
-ButtonFrame.InputChanged:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseMovement then
+end
+
+local function onDragUpdate(input)
+    if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
         dragInput = input
     end
-end)
+end
+
+TitleLabel.InputBegan:Connect(onDragStart)
+ButtonFrame.InputBegan:Connect(onDragStart)
+
+TitleLabel.InputChanged:Connect(onDragUpdate)
+ButtonFrame.InputChanged:Connect(onDragUpdate)
+
 UserInputService.InputChanged:Connect(function(input)
-    if input == dragInput and dragging then
+    if dragging and dragInput then
         local delta = input.Position - dragStart
-        ButtonFrame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+        ButtonFrame.Position = UDim2.new(
+            startPos.X.Scale,
+            startPos.X.Offset + delta.X,
+            startPos.Y.Scale,
+            startPos.Y.Offset + delta.Y
+        )
     end
 end)
 
@@ -175,8 +194,7 @@ spawn(function()
     if AutoExecute then
         print("Auto Execute triggered!")
         Button.Text = "⏳ Loading..."
-        LoadScripts()
-        wait(2)
+        LoadScripts()        wait(2)
         Loaded = true
         Button.Text = "✓ Loaded"
         Button.BackgroundColor3 = Color3.fromRGB(0, 200, 100)
@@ -184,4 +202,4 @@ spawn(function()
     end
 end)
 
-print("kaitun set (with auto) loaded! by Phongthikscripting(github)")
+print("kaitun set (mobile drag fix) loaded! by Phongthikscripting")
